@@ -18,5 +18,5 @@ This bash script performs RNA-Seq analysis, including quality control, trimming,
 * Run the script
 
 ```
-bash rnaseq_analysis.sh -r /path/to/reads_directory -i /path/to/genome_index -a /path/to/annotation_file.gff3 -o /path/to/output_directory
+bash covac_rnaseq_pipeline.sh --reads /path/to/reads --index /path/to/index --annotation /path/to/annotation.gff3 --readType PE
 ```
