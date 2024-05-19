@@ -4,8 +4,8 @@ This bash script performs RNA-Seq analysis, including quality control, trimming,
 
 ### Requirements
 
-* Cromwell
 * FastQC
+* MultiQC
 * Trimmomatic
 * STAR
 * HTSeq
