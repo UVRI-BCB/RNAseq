@@ -1,6 +1,6 @@
 {
-  "RNASeqPipeline.reads": "/path/to/reads.fastq.gz",
-  "RNASeqPipeline.index": "/path/to/genome_index",
-  "RNASeqPipeline.annotation": "/path/to/annotation.gff3"
+  "reads": "path/to/reads_directory",
+  "index": "path/to/genome_index",
+  "annotation": "path/to/annotation_file.gff3",
+  "readType": "PE"
 }
-
