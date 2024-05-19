@@ -12,7 +12,25 @@ params {
     Channel.fromPath(annotation).set { annotation_ch }
 }
 
-// Step 1: Quality control using FastQC and MultiQC
+// Step 1: Check for Paired-end or Single-end data
+process checkPairedEnd {
+    input:
+    file reads from reads_ch
+    
+    output:
+    file 'paired_end_flag.txt' into flag_ch
+
+    script:
+    """
+    if (new File(reads.getParent(), "*_R2.fastq.gz").list().size() > 0) {
+        println "Paired-end data detected."
+    } else {
+        println "Single-end data detected."
+    }
+    """
+}
+
+// Step 2: Quality control using FastQC and MultiQC
 process qc {
     input:
     file(reads) from reads_ch
@@ -28,22 +46,44 @@ process qc {
     """
 }
 
-// Step 2: Trimming using Trimmomatic
-process trimming {
+// Step 3: Trimming using Trimmomatic for paired-end data
+process trimmingPE {
     input:
     file(reads) from reads_ch
 
     output:
-    file("trimmed_reads/*.fq.gz") into trimmed_reads_ch
+    file("trimmed_reads/*_paired_R1.fastq.gz") into trimmed_reads_ch
+    file("trimmed_reads/*_unpaired_R1.fastq.gz") into unpaired_reads_ch
 
     script:
     """
-    trimmomatic ...
+    trimmomatic PE -phred33 $reads/*_R1.fastq.gz $reads/*_R2.fastq.gz \
+        trimmed_reads/${reads.baseName}_paired_R1.fastq.gz \
+        trimmed_reads/${reads.baseName}_unpaired_R1.fastq.gz \
+        trimmed_reads/${reads.baseName}_paired_R2.fastq.gz \
+        trimmed_reads/${reads.baseName}_unpaired_R2.fastq.gz \
+        LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
     """
 }
 
-// Step 3: Aligning to the human reference genome using STAR
-process alignment {
+// Step 4: Trimming using Trimmomatic for single-end data
+process trimmingSE {
+    input:
+    file(reads) from reads_ch
+
+    output:
+    file("trimmed_reads/*.fastq.gz") into trimmed_reads_ch
+
+    script:
+    """
+    trimmomatic SE -phred33 $reads/*_R1.fastq.gz \
+        trimmed_reads/${reads.baseName}_trimmed.fastq.gz \
+        LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+    """
+}
+
+// Step 5: Aligning to the human reference genome using STAR for paired-end data
+process alignmentPE {
     input:
     file(reads) from trimmed_reads_ch
     file(index) from index_ch
@@ -53,28 +93,28 @@ process alignment {
 
     script:
     """
-    STAR --genomeDir $index --readFilesIn $reads --outFileNamePrefix aligned_reads/
+    STAR --genomeDir $index --readFilesIn $reads/*_paired_R1.fastq.gz $reads/*_paired_R2.fastq.gz --outFileNamePrefix aligned_reads/ --quantMode GeneCounts
     """
 }
 
-// Step 4: Generating gene counts using htseq-count
-process gene_counts {
+// Step 6: Aligning to the human reference genome using STAR for single-end data
+process alignmentSE {
     input:
-    file(reads) from alignment_ch
-    file(annotation) from annotation_ch
+    file(reads) from trimmed_reads_ch
+    file(index) from index_ch
 
     output:
-    file("gene_counts/*.txt") into gene_counts_ch
+    file("aligned_reads/*.bam") into alignment_ch
 
     script:
     """
-    htseq-count -f bam -s no -i gene_id $reads $annotation > gene_counts/gene_counts.txt
+    STAR --genomeDir $index --readFilesIn $reads --outFileNamePrefix aligned_reads/ --quantMode GeneCounts
     """
 }
 
 // Define output channels
+channel.fromPath('flag_ch')
 channel.fromPath('fastqc_ch')
 channel.fromPath('multiqc_ch')
 channel.fromPath('trimmed_reads_ch')
 channel.fromPath('alignment_ch')
-channel.fromPath('gene_counts_ch')
