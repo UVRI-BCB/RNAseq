@@ -22,10 +22,6 @@ Usage:
 
 3. Run the pipeline:
 
-`nextflow run rnaseq_pipeline.nf --reads "/path/to/reads.fastq.gz" --index "/path/to/genome_index" --annotation "/path/to/annotation.gff3"`
-
-4. Monitor the progress and access results:
-- Nextflow will automatically create output directories for each step of the analysis.
-- You can monitor the pipeline progress and view the generated reports in the terminal.
-
-For more information on Nextflow and RNA-Seq analysis, refer to the Nextflow documentation and respective tool manuals.
+```bash
+nextflow run covac_rnaseq_pipeline.nf --reads "/path/to/reads.fastq.gz" --index "/path/to/genome_index" --annotation "/path/to/annotation.gff3"
+```
