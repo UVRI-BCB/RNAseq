@@ -5,6 +5,7 @@ Requirements
 
 * Cromwell
 * FastQC
+* MultiQC
 * Trimmomatic
 * STAR
 * HTSeq
@@ -19,7 +20,7 @@ Create a JSON file specifying the paths to your input files.
 
 ```bash
 {
-  "RNASeqPipeline.reads": "/path/to/reads.fastq.gz",
+  "RNASeqPipeline.reads": "/path/to/reads",
   "RNASeqPipeline.index": "/path/to/genome_index",
   "RNASeqPipeline.annotation": "/path/to/annotation.gff3"
 }
