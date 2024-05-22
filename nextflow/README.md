@@ -6,11 +6,14 @@ This Nextflow script executes a complete RNA-Seq analysis pipeline, including qu
 
 Requirements:
 - Nextflow (https://www.nextflow.io/)
+- FastQC
+- MultiQC
 - Trimmomatic (https://github.com/usadellab/Trimmomatic)
 - STAR (https://github.com/alexdobin/STAR)
 - HTSeq (https://htseq.readthedocs.io/)
 
 Usage:
+
 1. Prepare your input files:
    - Provide your raw RNA-Seq reads in FASTQ format.
    - Prepare the human reference genome index for alignment.
