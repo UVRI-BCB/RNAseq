@@ -6,8 +6,8 @@ This Nextflow script executes a complete RNA-Seq analysis pipeline, including qu
 
 Requirements:
 - Nextflow (https://www.nextflow.io/)
-- FastQC
-- MultiQC
+- FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- MultiQC (https://multiqc.info/docs/getting_started/installation/)
 - Trimmomatic (https://github.com/usadellab/Trimmomatic)
 - STAR (https://github.com/alexdobin/STAR)
 - HTSeq (https://htseq.readthedocs.io/)
