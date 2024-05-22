@@ -6,18 +6,15 @@ This repository contains pipelines for RNA-Seq analysis implemented in various l
 
 #### Nextflow Pipeline
 
-The Nextflow pipeline (nextflow/) is implemented using Nextflow, a domain-specific language for data-driven computational pipelines. It includes steps for quality control, trimming, alignment, and gene expression quantification.
-For detailed instructions and usage information, please refer to the Nextflow README.
+The [Nextflow pipeline](https://github.com/UVRI-BCB/RNAseq/tree/main/bash) is implemented using Nextflow, a domain-specific language for data-driven computational pipelines. It includes steps for quality control, trimming, alignment, and gene expression quantification.
 
 #### WDL Pipeline
 
-The WDL pipeline (wdl/) is implemented using Workflow Description Language (WDL), a language for describing data analysis workflows. It includes steps for quality control, trimming, alignment, and gene expression quantification.
-For detailed instructions and usage information, please refer to the WDL README.
+The [WDL pipeline](https://github.com/UVRI-BCB/RNAseq/tree/main/wdl) is implemented using Workflow Description Language (WDL), a language for describing data analysis workflows. It includes steps for quality control, trimming, alignment, and gene expression quantification.
 
 #### Bash Pipeline
 
-The Bash pipeline (bash/) is implemented as a bash script. It performs RNA-Seq analysis using native Linux tools and bash scripting. It includes steps for quality control, trimming, alignment, and gene expression quantification.
-For detailed instructions and usage information, please refer to the Bash README.
+The [Bash pipeline](https://github.com/UVRI-BCB/RNAseq/tree/main/bash) is implemented as a bash script. It performs RNA-Seq analysis using native Linux tools and bash scripting. It includes steps for quality control, trimming, alignment, and gene expression quantification.
 
 ### Usage
 
