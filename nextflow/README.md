@@ -8,7 +8,7 @@ Requirements:
 - Nextflow (https://www.nextflow.io/)
 - Trimmomatic (https://github.com/usadellab/Trimmomatic)
 - STAR (https://github.com/alexdobin/STAR)
-- HTSeq (https://htseq.readthedocs.io/en/release_0.11.1/)
+- HTSeq (https://htseq.readthedocs.io/)
 
 Usage:
 1. Prepare your input files:
@@ -23,5 +23,5 @@ Usage:
 3. Run the pipeline:
 
 ```bash
-nextflow run covac_rnaseq_pipeline.nf --reads "/path/to/reads.fastq.gz" --index "/path/to/genome_index" --annotation "/path/to/annotation.gff3"
+nextflow run covac_rnaseq_pipeline.nf --reads "/path/to/reads" --index "/path/to/genome_index" --annotation "/path/to/annotation.gff3"
 ```
