@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#PBS -l select=1:ncpus=24:mem=60gb
+#PBS -l walltime=3:0:0
+
+# Load modules
+module load star
+
+# create dir to store the index files
+mkdir -p genomeIndex
+
+# since we have huge files (hence high I/O), we copy files to the TMPDIR as recommended in the HPC docs
+
+cp $EPHEMERAL/refs/GRCh38.primary_assembly.genome.fa $TMPDIR
+cp $EPHEMERAL/refs/gencode.v46.primary_assembly.annotation.gtf $TMPDIR
+
+# index the genome using star
+STAR --runThreadN 23 --runMode genomeGenerate --genomeDir genomeIndex --genomeFastaFiles GRCh38.primary_assembly.genome.fa --sjdbGTFfile gencode.v46.primary_assembly.annotation.gtf
+
+# copy the index back to the working directory
+cp -r $TMPDIR/genomeIndex $EPHEMERAL/refs/
