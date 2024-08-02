@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#PBS -l select=1:ncpus=120:mem=10gb
+#PBS -l walltime=20:0:0
+
+# Load modules
+module load fastqc
+module load multiqc
+
+# create dir to store qc results
+
+mkdir -p qc
+for file1 in $(ls $EPHEMERAL/data/batch*/clean/*/*.fq.gz); do
+
+	cp -r $file1 $TMPDIR
+
+	# run qc on each file
+	fastqc $file1 -o qc 
+
+	cp qc/*.html $EPHEMERAL/qc
+	# remove the processed file from tmp to create space for others
+        rm $file1
+done
+
+multiqc qc/* -o qc
+
+# copy output back to working directory
+cp  $TMPDIR/qc/*.html $EPHEMERAL/qc
