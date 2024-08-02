@@ -1,0 +1,40 @@
+#! /bin/bash
+
+# specific to pbs
+#PBS -l select=8:ncpus=128:mem=60gb
+#PBS -l walltime=10:0:0
+
+# Analysis script
+module load star 
+
+# Copy input files to tmp dir where the analysis is done
+
+cp -r $EPHEMERAL/refs/genomeIndex $TMPDIR
+cp $EPHEMERAL/refs/gencode.v46.primary_assembly.basic.annotation.gtf $TMPDIR
+
+for file1 in $(ls $EPHEMERAL/data/batch*/clean/*/*_1.fq.gz); do
+
+sname=$(basename $file1 '_1.fq.gz');
+
+echo "======== Analysing sample " ${sname} "========"
+
+cp $EPHEMERAL/data/batch*/clean/*/${sname}_*.fq.gz $TMPDIR
+
+STAR \
+--outSAMattributes All \
+--outSAMtype BAM SortedByCoordinate \
+--quantMode GeneCounts \
+--readFilesCommand zcat \
+--runThreadN 127 \
+--sjdbGTFfile gencode.v46.primary_assembly.basic.annotation.gtf \
+--genomeDir genomeIndex \
+--readFilesIn ${sname}_1.fq.gz ${sname}_2.fq.gz \
+--outFileNamePrefix ${sname} ;
+
+cp $TMPDIR/${sname}*.out.tab  $EPHEMERAL/mapping
+cp $TMPDIR/${sname}*.sortedByCoord.out.bam  $EPHEMERAL/mapping
+cp $TMPDIR/${sname}*.final.out  $EPHEMERAL/mapping
+
+rm ${sname}_*.fq.gz
+
+done
